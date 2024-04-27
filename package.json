@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "arangojs": "^8.8.1",
+    "autoprefixer": "^10.4.19",
+    "axios": "^1.6.8",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "path": "^0.12.7",
+    "postcss-cli": "^11.0.0",
+    "tailwindcss": "^3.4.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "scripts": {
+    "start": "nodemon app.js"
+  }
+}
