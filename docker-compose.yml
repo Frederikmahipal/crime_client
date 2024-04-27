@@ -6,6 +6,7 @@ services:
       - "8000:8000"
     volumes:
       - .:/app
+    command: bash -c "sleep 5 && npm start"
     depends_on:
       - arangodb
   arangodb:

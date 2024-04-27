@@ -4,28 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crime Map</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="output.css">
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
-
 </head>
-<body>
-    <div id="top-buttons">
-        <button id="map-button">Map View</button>
-        <button id="list-button">List View</button>
+<body class="bg-gray-800">
+    <div id="top-buttons" class="flex justify-between space-x-4 my-4 mx-4">
+        <div>
+            <button id="map-button" class="px-4 py-2 bg-blue-500 text-white rounded">Map View</button>
+            <button id="list-button" class="px-4 py-2 bg-blue-500 text-white rounded">List View</button>
+        </div>
+        
+        <!-- Search field -->
+        <div class="flex-grow">
+            <input id="search-bar" type="text" placeholder="Search..." class="p-2 w-full">
+        </div>
+
+        <div>
+            <button id="toggle-button" class="option px-4 py-2 bg-blue-500 text-white rounded" data-value="mapbox://styles/mapbox/navigation-day-v1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 14a4 4 0 100-8 4 4 0 000 8z" />
+                </svg>
+            </button>
+        </div>
     </div>
-    <div id="map"></div>
-    <div id="list"></div>
-    <div id="search">
-        <input type="text" id="search-bar" placeholder="Search crimes...">
-    </div>
-    <select id="styleSelector">
-        <option value="mapbox://styles/mapbox/streets-v11">Streets</option>
-        <option value="mapbox://styles/mapbox/outdoors-v11">Outdoors</option>
-        <option value="mapbox://styles/mapbox/light-v10">Light</option>
-        <option value="mapbox://styles/mapbox/dark-v10">Dark</option>
-        <option value="mapbox://styles/mapbox/satellite-v9">Satellite</option>
-        <option value="mapbox://styles/mapbox/satellite-streets-v11">Satellite Streets</option>
-    </select>
+    <div id="map" class="w-full:bg-gray-900" style="height: 100vh;"></div>
+    <div id="list" class="w-full h-screen overflow-auto bg-gray-700 p-6 px-8"></div>
+
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js"></script>
     <script src="mapbox.js"></script>
 </body>
