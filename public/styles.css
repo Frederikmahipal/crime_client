@@ -71,6 +71,8 @@ body {
     border-radius: 5px;
 }
 
+
+
 @media (max-width: 600px) {
     #map {
         width: 100vw;

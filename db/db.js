@@ -60,6 +60,7 @@ async function getCrimes() {
                 RETURN suspect
             )
             RETURN {
+                "id": crime._id, // Add this line
                 "lat": crime.lat,
                 "lon": crime.lon,
                 "type": crime.type,
@@ -70,7 +71,7 @@ async function getCrimes() {
         `);
 
         const crimes = await cursor.all();
-        console.log('Crimes:', crimes);
+       
         return crimes;
     } catch (error) {
         console.error('Error getting crimes from db:', error);

@@ -77,8 +77,9 @@ function updateList(data) {
     list.innerHTML = '';
     data.forEach(crime => {
         const listItem = document.createElement('div');
+        listItem.className = 'p-2 border border-gray-300 rounded';
         listItem.innerHTML = `
-            <h2>${crime.type}</h2>
+            <h2 class="font-bold text-lg">${crime.type}</h2>
             <p>Severity: ${crime.severity}</p>
             <p>Suspects: ${crime.suspects.map(suspect => suspect.name).join(', ')}</p>
         `;
