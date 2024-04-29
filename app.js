@@ -1,8 +1,8 @@
-require('dotenv').config();
 const express = require('express');
 const app = express();
 const path = require('path');
-const { handleGetCrimes, getCrimes } = require('./db/db.js');
+const { handleGetCrimes, getCrimes, resetData } = require('./db/db.js');
+
 
 
 app.use(express.json());
@@ -15,6 +15,10 @@ app.get('/crimes', async (req, res) => {
     res.json(crimes);
   });
 
+app.post('/reset', async (req, res) => {
+    await resetData();
+    res.sendStatus(200);
+});
 
 const PORT = 8000;
 app.listen(PORT, () => {
