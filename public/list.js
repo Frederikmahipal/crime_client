@@ -1,6 +1,10 @@
-document.getElementById('list-button').addEventListener('click', function () {
+document.getElementById('crimes-button').addEventListener('click', function () {
     document.getElementById('map').style.display = 'none';
     document.getElementById('list').style.display = 'block';
+    document.getElementById('suspects').style.display = 'none';
+    document.getElementById('toggle-most-wanted-button').style.display = 'none'; // Hide toggle button
+    document.getElementById('list-title').style.display = 'none'; // Hide title
+    document.getElementById('sort-category').style.display = 'block'; // Show category
     fetchCrimesList();
 });
 
@@ -8,7 +12,6 @@ function fetchCrimesList() {
     fetch('/crimes')
         .then(response => response.json())
         .then(data => {
-            console.log(data); // Add this line
             crimesData = data;
             updateCrimes();
         });
@@ -22,7 +25,7 @@ function showCrimeModal(crime) {
     document.getElementById('modal-description').textContent = `Description: ${crime.description}`;
     document.getElementById('modal-suspects').textContent = `Suspects: ${crime.suspects.map(suspect => suspect.name).join(', ')}`;
     if (crime.crimeScene) {
-        document.getElementById('modal-crimeScene').textContent = `Crime Scene: ${crime.crimeScene.location}, ${crime.crimeScene.description}, Evidence Found: ${crime.crimeScene.foundEvidence}`;
+        document.getElementById('modal-crimeScene').textContent = `Crime Scene: ${crime.crimeScene.location}, Evidence Found: ${crime.crimeScene.foundEvidence}`;
     } else {
         document.getElementById('modal-crimeScene').textContent = 'No crime scene information available';
     }
@@ -66,7 +69,7 @@ document.getElementById('search-bar').addEventListener('input', (event) => {
 });
 
 function updateCrimes() {
-    const sortOrder = document.getElementById('sort-order').value;
+
     const sortCategory = document.getElementById('sort-category').value;
 
     let filteredData = crimesData;
@@ -76,20 +79,10 @@ function updateCrimes() {
         filteredData = filteredData.filter(crime => crime.category === sortCategory);
     }
 
-    // Sort by severity
-    filteredData.sort((a, b) => {
-        if (sortOrder === 'asc') {
-            return a.severity - b.severity;
-        } else {
-            return b.severity - a.severity;
-        }
-    });
-
     updateList(filteredData);
     updateMarkers(filteredData);
 }
 
-document.getElementById('sort-order').addEventListener('change', updateCrimes);
 document.getElementById('sort-category').addEventListener('change', updateCrimes);
 
 

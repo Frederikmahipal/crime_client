@@ -25,8 +25,12 @@ document.querySelector('#toggle-button').addEventListener('click', function() {
 document.getElementById('map-button').addEventListener('click', function () {
     document.getElementById('map').style.display = 'block';
     document.getElementById('list').style.display = 'none';
-    document.getElementById('list-controls').style.display = 'block';
+    document.getElementById('suspects').style.display = 'none';
+    document.getElementById('toggle-most-wanted-button').style.display = 'none'; // Hide toggle button
+    document.getElementById('list-title').style.display = 'none'; // Hide title
+
 });
+
 function fetchCrimes() {
     fetch('/crimes')
         .then(response => response.json())
@@ -37,18 +41,19 @@ function fetchCrimes() {
 }
 
 function updateMarkers(data) {
-
     markers.forEach(marker => marker.remove());
     markers = [];
    
     data.forEach(crime => {
+        // Check if crime has valid lon and lat values
+        if (typeof crime.lon === 'number' && typeof crime.lat === 'number') {
+            const marker = new mapboxgl.Marker()
+                .setLngLat([crime.lon, crime.lat])
+                .addTo(map);
 
-        const marker = new mapboxgl.Marker()
-            .setLngLat([crime.lon, crime.lat])
-            .addTo(map);
-
-        marker.getElement().addEventListener('click', () => showCrimeModal(crime));
-        markers.push(marker);
+            marker.getElement().addEventListener('click', () => showCrimeModal(crime));
+            markers.push(marker);
+        }
     });
 }
 

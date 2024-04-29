@@ -63,7 +63,7 @@ async function handleGetCrimes(req, res) {
             const savedSuspect = await suspectsCollection.save(suspectData);
             suspect = await suspectsCollection.document(savedSuspect._key);
         }
-    
+
         // Check if a relation already exists 
         const relationshipCursor = await db.query(aql`
             FOR edge IN ${crimesCommittedBySuspectsCollection}
@@ -71,7 +71,7 @@ async function handleGetCrimes(req, res) {
             RETURN edge
         `);
         const existingRelationship = await relationshipCursor.next();
-    
+
         //create a new one if not
         if (!existingRelationship) {
             await crimesCommittedBySuspectsCollection.save({
@@ -84,6 +84,31 @@ async function handleGetCrimes(req, res) {
     res.sendStatus(200);
 }
 
+async function getAllSuspects() {
+    try {
+        const suspectsCollection = db.collection('suspects');
+        const crimesCommittedBySuspectsCollection = db.collection('crimes_committed_by_suspects');
+        const crimesCollection = db.collection('crimes');
+        const cursor = await db.query(aql`
+            FOR suspect IN ${suspectsCollection}
+                LET crimes = (
+                    FOR crime IN ${crimesCollection}
+                    FILTER crime._id IN (
+                        FOR edge IN ${crimesCommittedBySuspectsCollection}
+                        FILTER edge._to == suspect._id
+                        RETURN edge._from
+                    )
+                    RETURN crime
+                )
+                RETURN MERGE(suspect, { "crimes": crimes })
+            `);
+        const suspects = await cursor.all();
+        return suspects;
+    } catch (error) {
+        console.error('Error getting suspects from db:', error);
+        throw error;
+    }
+}
 
 async function getCrimes() {
     try {
@@ -114,6 +139,7 @@ async function getCrimes() {
                     "category": crime.category,
                     "description": crime.description,
                     "severity": crime.severity,
+                    "reported_at": crime.reported_at,
                     "crimeScene": crimeScene,
                     "suspects": suspects
                 }
@@ -127,6 +153,37 @@ async function getCrimes() {
     }
 }
 
+async function getMostWanted() {
+    try {
+        const suspectsCollection = await checkDuplicateCollection('suspects');
+        const crimesCommittedBySuspectsCollection = await checkDuplicateCollection('crimes_committed_by_suspects', true);
+
+        const cursor = await db.query(aql`
+            FOR suspect IN ${suspectsCollection}
+                LET crimes = (
+                    FOR crime, edge IN 1..1 INBOUND suspect ${crimesCommittedBySuspectsCollection}
+                    RETURN crime
+                )
+                LET totalSeverity = SUM(crimes[*].severity)
+                LET crimeCount = LENGTH(crimes)
+                SORT totalSeverity DESC, crimeCount DESC
+                LIMIT 15
+                RETURN {
+                    "suspect": suspect,
+                    "crimes": crimes,
+                    "crimeCount": crimeCount,
+                    "totalSeverity": totalSeverity
+                }
+        `);
+        const mostWanted = await cursor.all();
+
+        return mostWanted;
+    } catch (error) {
+        console.error('Error getting most wanted from db:', error);
+        throw error;
+    }
+}
+
 async function resetData() {
     const collections = await db.listCollections();
     for (const collection of collections) {
@@ -136,4 +193,4 @@ async function resetData() {
     console.log('All collections deleted.');
 }
 
-module.exports = { db, handleGetCrimes, getCrimes, resetData, checkDuplicateCollection };
+module.exports = { db, handleGetCrimes, getCrimes, resetData, checkDuplicateCollection, getMostWanted, getAllSuspects };

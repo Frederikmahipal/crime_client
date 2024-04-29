@@ -10,25 +10,20 @@
 <body class="bg-gray-800 ">
     <div id="top-buttons" class="flex justify-between space-x-4 my-4 mx-4">
         <div>
-            <button id="map-button" class="px-4 py-2 bg-blue-500 text-white rounded">Map View</button>
-            <button id="list-button" class="px-4 py-2 bg-blue-500 text-white rounded">List View</button>
+            <button id="map-button" class="px-4 py-2 bg-blue-500 text-white rounded">Map</button>
+            <button id="crimes-button" class="px-4 py-2 bg-blue-500 text-white rounded">Crimes</button>
+            <button id="suspects-button" class="px-4 py-2 bg-blue-500 text-white rounded">Suspects</button> 
         </div>
         <div class="flex-grow">
             <input id="search-bar" type="text" placeholder="Search..." class="p-2 w-full">
         </div>
         <div>
             <button id="toggle-button" class="option px-4 py-2 bg-blue-500 text-white rounded" data-value="mapbox://styles/mapbox/navigation-day-v1">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 14a4 4 0 100-8 4 4 0 000 8z" />
-                </svg>
+                <svg class="h-8 w-8 text-neutral-600"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -5v5h5" />  <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 5v-5h-5" /></svg>
             </button>
         </div>
     </div>
-    <div id="list-controls" class="my-4 mx-4">
-        <select id="sort-order">
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-        </select>
+    <div id="list-controls" class="flex justify-between my-4 mx-4">
         <select id="sort-category">
             <option value="">All Categories</option>
             <option value="Property Crime">Property Crime</option>
@@ -36,9 +31,12 @@
             <option value="White Collar Crime">White Collar Crime</option>
             <option value="Substance Abuse">Substance Abuse</option>
         </select>
+        <p id="list-title" class="self-center text-white" style="display: none;"></p>
+        <button id="toggle-most-wanted-button" class="px-4 py-2 bg-blue-500 text-white rounded hidden">Toggle Most Wanted</button>
     </div>
     <div id="map" class="w-full:bg-gray-900" style="height: 100vh;"></div>
     <div id="list" class="w-full h-screen bg-gray-700 p-6 px-8 scrollbar-hide"></div>
+    <div id="suspects" class="w-full h-screen bg-gray-700 p-6 px-8 scrollbar-hide hidden"></div> 
 
     <div id="crimeModal" class="modal fixed z-10 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
         <div class="flex items-end justify-center min-h-screen">
@@ -69,5 +67,6 @@
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js"></script>
     <script src="mapbox.js"></script>
     <script src="list.js"></script>
+    <script src="suspects.js"></script>
 </body>
 </html>
