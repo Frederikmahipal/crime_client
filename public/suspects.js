@@ -70,7 +70,6 @@ document.getElementById('search-bar').addEventListener('input', (event) => {
       
         filteredData = crimesData.filter(crime =>
             crime.type.toLowerCase().includes(searchTerm) ||
-            String(crime.severity).toLowerCase().includes(searchTerm) ||
             crime.suspects.some(suspect => suspect.name.toLowerCase().includes(searchTerm))
         );
         updateList(filteredData);
