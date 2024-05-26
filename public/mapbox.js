@@ -5,7 +5,6 @@ const map = new mapboxgl.Map({
     center: [-98.5, 39.5], // [lon, lat]
     zoom: 3,
     style: 'mapbox://styles/mapbox/streets-v11',
-    maxBounds: [[-125.000000, 24.396308], [-66.934570, 49.384358]]
 });
 let markers = [];
 
@@ -18,7 +17,6 @@ document.querySelector('#toggle-button').addEventListener('click', function() {
     } else {
         this.dataset.value = light;
     }
-
     map.setStyle(this.dataset.value);
 });
 
@@ -33,17 +31,27 @@ document.getElementById('map-button').addEventListener('click', function () {
 
 function fetchCrimes() {
     fetch('/crimes')
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('no connection to server');
+            }
+            return response.json();
+        })
         .then(data => {
+            console.log('Fetched crimes:', data); 
             crimesData = data;
             updateMarkers(data);
+        })
+        .catch(error => {
+            console.error('fetch failed:', error);
+            alert('Could not load crime data. Please try again later.');
         });
 }
 
 function updateMarkers(data) {
     markers.forEach(marker => marker.remove());
     markers = [];
-   
+
     data.forEach(crime => {
         // Check if crime has valid lon and lat values
         if (typeof crime.lon === 'number' && typeof crime.lat === 'number') {
@@ -53,7 +61,7 @@ function updateMarkers(data) {
 
             marker.getElement().addEventListener('click', () => showCrimeModal(crime));
             markers.push(marker);
-        }
+        } 
     });
 }
 

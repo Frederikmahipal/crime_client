@@ -39,7 +39,7 @@ function updateSuspectsList(data) {
     list.innerHTML = '';
     data.forEach(item => {
         const name = item.name;
-        const crimesCount = item.crimes.length; // Define crimesCount here
+        const crimesCount = item.crimes.length;
         const listItem = document.createElement('div');
         listItem.className = 'p-6 px-8 mb-4 bg-white rounded shadow-lg';
         listItem.innerHTML = `
@@ -60,14 +60,12 @@ document.getElementById('search-bar').addEventListener('input', (event) => {
     const searchTerm = event.target.value.toLowerCase();
     let filteredData;
     if (document.getElementById('suspects').style.display === 'block') {
-       
         filteredData = suspectsData.filter(suspect =>
             suspect.name.toLowerCase().includes(searchTerm) ||
             suspect.crimes.some(crime => crime.type.toLowerCase().includes(searchTerm))
         );
         updateSuspectsList(filteredData);
     } else {
-      
         filteredData = crimesData.filter(crime =>
             crime.type.toLowerCase().includes(searchTerm) ||
             crime.suspects.some(suspect => suspect.name.toLowerCase().includes(searchTerm))

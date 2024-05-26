@@ -17,6 +17,7 @@ function fetchCrimesList() {
         });
 }
 
+//Modal
 function showCrimeModal(crime) {
     console.log(crime.crimeScene);
     document.getElementById('modal-title').textContent = crime.type;
@@ -29,7 +30,6 @@ function showCrimeModal(crime) {
     } else {
         document.getElementById('modal-crimeScene').textContent = 'No crime scene information available';
     }
-    // Show the modal
     document.getElementById('crimeModal').style.display = "block";
 }
 
@@ -69,22 +69,16 @@ document.getElementById('search-bar').addEventListener('input', (event) => {
 });
 
 function updateCrimes() {
-
     const sortCategory = document.getElementById('sort-category').value;
-
     let filteredData = crimesData;
-
     // Filter by category
     if (sortCategory) {
         filteredData = filteredData.filter(crime => crime.category === sortCategory);
     }
-
     updateList(filteredData);
     updateMarkers(filteredData);
 }
 
 document.getElementById('sort-category').addEventListener('change', updateCrimes);
-
-
 fetchCrimesList();
 window.showCrimeModal = showCrimeModal;
